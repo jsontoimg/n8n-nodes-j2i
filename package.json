@@ -1,6 +1,6 @@
 {
 	"name": "@j2i/n8n-nodes-j2i",
-	"version": "0.1.0",
+	"version": "1.0.0",
 	"description": "n8n community node to render jsontoimg templates to images",
 	"license": "MIT",
 	"homepage": "https://jsontoimg.com",
