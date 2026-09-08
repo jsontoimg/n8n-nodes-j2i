@@ -1,6 +1,6 @@
 # @j2i/n8n-nodes-j2i
 
-This is an n8n community node. It lets you use GitHub Issues in your n8n workflows.
+n8n community node for [jsontoimg](https://jsontoimg.com). Render templates to PNG, JPG, WebP, AVIF, or PDF from n8n workflows.
 
 [n8n](https://n8n.io/) is a [fair-code licensed](https://docs.n8n.io/sustainable-use-license/) workflow automation platform.
 
@@ -8,66 +8,49 @@ This is an n8n community node. It lets you use GitHub Issues in your n8n workflo
 [Operations](#operations)
 [Credentials](#credentials)
 [Compatibility](#compatibility)
-[Usage](#usage)
 [Resources](#resources)
 
 ## Installation
 
 Follow the [installation guide](https://docs.n8n.io/integrations/community-nodes/installation/) in the n8n community nodes documentation.
 
+Package name: `@j2i/n8n-nodes-j2i`
+
 ## Operations
 
-- Issues
-    - Get an issue
-    - Get many issues in a repository
-    - Create a new issue
-- Issue Comments
-    - Get many issue comments
+- Template
+	- Get many templates
+	- Get template schema
+- Render
+	- Create a render (optional wait)
+	- Wait for a render
+	- Get a render
+	- Get a render asset URL
+	- Download a render asset (binary)
+- Batch
+	- Create a batch (up to 50 jobs)
+	- Get a batch
+- Signed Image
+	- Sign an image URL
+	- Sign many image URLs
+	- Download a signed image (binary; no API key on the GET; retries 503)
 
 ## Credentials
 
-You can use either access token or OAuth2 to use this node.
+Use a jsontoimg API key.
 
-### Access token
+1. Create a key under [Integrations → API keys](https://app.jsontoimg.com/integrations/api-keys).
+2. In n8n, add **jsontoimg API** credentials.
+3. Paste the key. Leave Base URL as `https://app.jsontoimg.com` unless you self-host.
 
-1. Open your GitHub profile [Settings](https://github.com/settings/profile).
-2. In the left navigation, select [Developer settings](https://github.com/settings/apps).
-3. In the left navigation, under Personal access tokens, select Tokens (classic).
-4. Select Generate new token > Generate new token (classic).
-5. Enter a descriptive name for your token in the Note field, like n8n integration.
-6. Select the Expiration you'd like for the token, or select No expiration.
-7. Select Scopes for your token. For most of the n8n GitHub nodes, add the `repo` scope.
-    - A token without assigned scopes can only access public information.
-8. Select Generate token.
-9. Copy the token.
-
-Refer to [Creating a personal access token (classic)](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic) for more information. Refer to Scopes for OAuth apps for more information on GitHub scopes.
-
-![Generated Access token in GitHub](https://docs.github.com/assets/cb-17251/mw-1440/images/help/settings/personal-access-tokens.webp)
-
-### OAuth2
-
-If you're self-hosting n8n, create a new GitHub [OAuth app](https://docs.github.com/en/apps/oauth-apps):
-
-1. Open your GitHub profile [Settings](https://github.com/settings/profile).
-2. In the left navigation, select [Developer settings](https://github.com/settings/apps).
-3. In the left navigation, select OAuth apps.
-4. Select New OAuth App.
-    - If you haven't created an app before, you may see Register a new application instead. Select it.
-5. Enter an Application name, like n8n integration.
-6. Enter the Homepage URL for your app's website.
-7. If you'd like, add the optional Application description, which GitHub displays to end-users.
-8. From n8n, copy the OAuth Redirect URL and paste it into the GitHub Authorization callback URL.
-9. Select Register application.
-10. Copy the Client ID and Client Secret this generates and add them to your n8n credential.
-
-Refer to the [GitHub Authorizing OAuth apps documentation](https://docs.github.com/en/apps/oauth-apps/using-oauth-apps/authorizing-oauth-apps) for more information on the authorization process.
+Requests send `Authorization: Bearer <key>` to `/api/v1`. Signed image downloads do not send the key.
 
 ## Compatibility
 
-Compatible with n8n@1.60.0 or later
+Compatible with n8n@1.60.0 or later.
 
 ## Resources
 
-* [n8n community nodes documentation](https://docs.n8n.io/integrations/#community-nodes)
-* [GitHub API docs](https://docs.github.com/en/rest/issues)
+- [n8n community nodes documentation](https://docs.n8n.io/integrations/#community-nodes)
+- [jsontoimg n8n docs](https://docs.jsontoimg.com/docs/integrations/n8n)
+- [jsontoimg API reference](https://docs.jsontoimg.com/docs/api)
