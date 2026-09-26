@@ -8,6 +8,7 @@ n8n community node for [jsontoimg](https://jsontoimg.com). Render templates to P
 [Operations](#operations)
 [Credentials](#credentials)
 [Compatibility](#compatibility)
+[Usage](#usage)
 [Resources](#resources)
 
 ## Installation
@@ -48,6 +49,46 @@ Requests send `Authorization: Bearer <key>` to `/api/v1`. Signed image downloads
 ## Compatibility
 
 Compatible with n8n@1.60.0 or later.
+
+## Usage
+
+End-to-end: **Render → Create** a PNG and wait for the signed `assetUrl`.
+
+1. Install the node and add **jsontoimg API** credentials (see [Credentials](#credentials)).
+2. Add a **jsontoimg** node.
+3. Set **Resource** to `Render` and **Operation** to `Create`.
+4. Pick a **Template** from the list (or paste a template ID). Template is this field, not the Payload JSON.
+5. Put format, layers, and `wait` in **Payload**:
+
+```json
+{
+  "format": "png",
+  "wait": 60,
+  "layers": {
+    "headline": { "text": "{{ $json.title }}" },
+    "photo": { "image_url": "{{ $json.imageUrl }}" }
+  }
+}
+```
+
+Layer names must match the design. Use **Template → Get Schema** first if you are unsure.
+
+**Expected output** when `wait` is set and the job finishes:
+
+```json
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "status": "done",
+  "format": "png",
+  "attempts": 1,
+  "error": null,
+  "assetUrl": "https://app.jsontoimg.com/api/v1/renders/550e8400-e29b-41d4-a716-446655440000/asset?sig=…"
+}
+```
+
+`assetUrl` includes `?sig=` so it works in `<img>` with no API key. Use **Download Asset** with the render `id` when the next node needs binary (Gmail, Drive, Slack).
+
+Without `wait`, Create queues the job (`status: "queued"`). Follow with **Wait**, **Get**, or a webhook.
 
 ## Resources
 

@@ -2,7 +2,7 @@
 	"node": "@j2i/n8n-nodes-j2i.jsontoimg",
 	"nodeVersion": "1.0",
 	"codexVersion": "1.0",
-	"categories": ["Marketing"],
+	"categories": ["Marketing & Content"],
 	"resources": {
 		"credentialDocumentation": [
 			{

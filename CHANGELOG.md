@@ -7,7 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Node `typeVersion` is `1` (see `.agents/versioning.md`). Package versions below are npm releases, not n8n light/full node versions.
 
-## [1.0.0] - Unreleased
+## [1.0.1] - 2026-09-26
+
+### Changed
+
+- README: add a Create-a-render usage example with sample Payload and expected output shape.
+- Codex category: `Marketing` → `Marketing & Content` so n8n's nodes panel keeps the category.
+
+## [1.0.0] - 2026-09-08
 
 First public release on the [n8n community nodes](https://docs.n8n.io/integrations/community-nodes/) registry.
 
