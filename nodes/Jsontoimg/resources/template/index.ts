@@ -54,37 +54,44 @@ export const templateDescription: INodeProperties[] = [
 		},
 	},
 	{
-		displayName: 'Project ID',
-		name: 'project',
-		type: 'string',
-		default: '',
-		description: 'Filter templates by project ID',
+		displayName: 'Filters',
+		name: 'filters',
+		type: 'collection',
+		placeholder: 'Add Filter',
+		default: {},
 		displayOptions: {
 			show: { ...showTemplate, operation: ['getAll'] },
 		},
-	},
-	{
-		displayName: 'Offset',
-		name: 'offset',
-		type: 'number',
-		typeOptions: { minValue: 0 },
-		default: 0,
-		description: 'Number of templates to skip (ignored when Return All is on)',
-		displayOptions: {
-			show: { ...showTemplate, operation: ['getAll'], returnAll: [false] },
-		},
+		options: [
+			{
+				displayName: 'Project ID',
+				name: 'project',
+				type: 'string',
+				default: '',
+				description: 'Filter templates by project ID',
+			},
+		],
 	},
 	templateLocator({ resource: ['template'], operation: ['getSchema'] }),
 	{
-		displayName: 'Version',
-		name: 'version',
-		type: 'number',
-		typeOptions: { minValue: 0 },
-		default: 0,
-		description: 'Pin a design version. 0 uses the latest version.',
+		displayName: 'Options',
+		name: 'options',
+		type: 'collection',
+		placeholder: 'Add Option',
+		default: {},
 		displayOptions: {
 			show: { ...showTemplate, operation: ['getSchema'] },
 		},
+		options: [
+			{
+				displayName: 'Version',
+				name: 'version',
+				type: 'number',
+				typeOptions: { minValue: 0 },
+				default: 0,
+				description: 'Pin a design version. 0 uses the latest version.',
+			},
+		],
 	},
 ];
 
@@ -99,7 +106,8 @@ export async function executeTemplate(
 ): Promise<INodeExecutionData | INodeExecutionData[]> {
 	if (operation === 'getAll') {
 		const returnAll = this.getNodeParameter('returnAll', i) as boolean;
-		const projectRaw = this.getNodeParameter('project', i, '') as string;
+		const filters = this.getNodeParameter('filters', i, {}) as IDataObject;
+		const projectRaw = filters.project as string | undefined;
 		const project = projectRaw ? projectRaw : undefined;
 		const templates: IDataObject[] = [];
 
@@ -117,8 +125,7 @@ export async function executeTemplate(
 			}
 		} else {
 			const limit = this.getNodeParameter('limit', i) as number;
-			const offset = this.getNodeParameter('offset', i, 0) as number;
-			const qs: IDataObject = { limit, offset };
+			const qs: IDataObject = { limit };
 			if (project) qs.project = project;
 			const page = await listPage(this, qs);
 			templates.push(...(Array.isArray(page.templates) ? page.templates : []));
@@ -128,7 +135,8 @@ export async function executeTemplate(
 	}
 
 	const template = this.getNodeParameter('templateId', i, '', { extractValue: true }) as string;
-	const version = this.getNodeParameter('version', i, 0) as number;
+	const options = this.getNodeParameter('options', i, {}) as IDataObject;
+	const version = (options.version as number | undefined) ?? 0;
 	const qs: IDataObject = {};
 	if (version > 0) qs.version = version;
 	const json = (await jsontoimgApiRequest.call(this, 'GET', `/templates/${template}/schema`, {

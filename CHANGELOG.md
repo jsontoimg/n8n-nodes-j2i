@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Node `typeVersion` is `1` (see `.agents/versioning.md`). Package versions below are npm releases, not n8n light/full node versions.
 
+## [1.0.2] - 2026-10-04
+
+### Changed
+
+- Template Get Many no longer exposes Offset. Return All pages internally; Limit still caps a single page.
+- Optional fields sit in collections: Project ID under Filters (Get Many), Version under Options (Get Schema), Timeout under Options (Render Wait and Signed Image Download).
+
 ## [1.0.1] - 2026-09-26
 
 ### Changed

@@ -69,15 +69,24 @@ export const renderDescription: INodeProperties[] = [
 		},
 	},
 	{
-		displayName: 'Timeout',
-		name: 'timeout',
-		type: 'number',
-		typeOptions: { minValue: 1, maxValue: 60 },
-		default: 30,
-		description: 'Seconds to wait (default 30, max 60)',
+		displayName: 'Options',
+		name: 'options',
+		type: 'collection',
+		placeholder: 'Add Option',
+		default: {},
 		displayOptions: {
 			show: { ...showRender, operation: ['wait'] },
 		},
+		options: [
+			{
+				displayName: 'Timeout',
+				name: 'timeout',
+				type: 'number',
+				typeOptions: { minValue: 1, maxValue: 60 },
+				default: 30,
+				description: 'Seconds to wait (default 30, max 60)',
+			},
+		],
 	},
 ];
 
@@ -103,7 +112,8 @@ export async function executeRender(
 	}
 
 	if (operation === 'wait') {
-		const timeout = this.getNodeParameter('timeout', i, 30) as number;
+		const options = this.getNodeParameter('options', i, {}) as IDataObject;
+		const timeout = (options.timeout as number | undefined) ?? 30;
 		const json = (await jsontoimgApiRequest.call(this, 'GET', `/renders/${renderId}/wait`, {
 			qs: { timeout },
 			timeout: waitTimeoutMs(timeout),

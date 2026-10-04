@@ -78,15 +78,24 @@ export const signedImageDescription: INodeProperties[] = [
 		},
 	},
 	{
-		displayName: 'Timeout',
-		name: 'timeout',
-		type: 'number',
-		typeOptions: { minValue: 1, maxValue: 60 },
-		default: 30,
-		description: 'Seconds to wait on 503 (default 30, max 60)',
+		displayName: 'Options',
+		name: 'options',
+		type: 'collection',
+		placeholder: 'Add Option',
+		default: {},
 		displayOptions: {
 			show: { ...showSigned, operation: ['download'] },
 		},
+		options: [
+			{
+				displayName: 'Timeout',
+				name: 'timeout',
+				type: 'number',
+				typeOptions: { minValue: 1, maxValue: 60 },
+				default: 30,
+				description: 'Seconds to wait on 503 (default 30, max 60)',
+			},
+		],
 	},
 ];
 
@@ -112,7 +121,8 @@ export async function executeSignedImage(
 	}
 
 	const url = this.getNodeParameter('url', i) as string;
-	const timeout = this.getNodeParameter('timeout', i, 30) as number;
+	const options = this.getNodeParameter('options', i, {}) as IDataObject;
+	const timeout = (options.timeout as number | undefined) ?? 30;
 	const origin = await getApiOrigin.call(this);
 	const fetchUrl = rewriteSignedImgUrl(url, `${origin}/api/v1`);
 	if (!fetchUrl) {
